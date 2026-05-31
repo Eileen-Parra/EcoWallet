@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { obtenerNivel, obtenerProgreso } from '../data/xpSystem'
 
 const DESTINOS = [
   {
@@ -7,7 +8,7 @@ const DESTINOS = [
     subtitulo: 'Tu reino de un vistazo',
     emoji: '🏰',
     color: 'var(--silver-300)',
-    descripcion: 'Observa el estado de tu reino, tus Gastos, producción de CO₂ y progreso general.',
+    descripcion: 'Observa el estado de tu reino. Gastos, CO₂ y progreso general.',
   },
   {
     id: 'registrar',
@@ -31,7 +32,7 @@ const DESTINOS = [
     subtitulo: 'Estadísticas del reino',
     emoji: '📊',
     color: 'var(--cat-clothes)',
-    descripcion: 'Analiza tus patrones de gasto y tu impacto ambiental en el paso del tiempo.',
+    descripcion: 'Analiza tus patrones de gasto y tu impacto ambiental en el tiempo.',
   },
   {
     id: 'manual',
@@ -39,7 +40,7 @@ const DESTINOS = [
     subtitulo: 'Manual del aventurero',
     emoji: '📖',
     color: 'var(--cat-tech)',
-    descripcion: 'Descubre consejos ecológicos y desbloquea misiones para ganar XP y aportar al reino.',
+    descripcion: 'Descubre consejos ecológicos y desbloquea misiones para ganar XP.',
   },
   {
     id: 'forja',
@@ -51,31 +52,41 @@ const DESTINOS = [
   },
 ]
 
-function MapPage({ heroe, onNavegar }) {
+function MapPage({ heroe, xp, onNavegar }) {
   const [hover, setHover] = useState(null)
   const destinoHover = DESTINOS.find(d => d.id === hover)
+  const nivel = obtenerNivel(xp)
+  const progreso = obtenerProgreso(xp)
 
   return (
     <div style={styles.contenedor}>
 
-      {/* CABECERA */}
+
       <div style={styles.cabecera}>
         <div style={styles.heroeInfo}>
           <span style={styles.heroeAvatar}>{heroe.avatar}</span>
           <div>
-            <p style={styles.heroeNombre}>
-              {heroe.nombre}
-            </p>
+            <p style={styles.heroeNombre}>{heroe.nombre}</p>
             <p style={styles.heroeClase}>
-              {heroe.clase.charAt(0).toUpperCase() + heroe.clase.slice(1)} · 620 XP
+              {heroe.clase.charAt(0).toUpperCase() + heroe.clase.slice(1)}
+              {' · '}
+              <span style={{ color: 'var(--gold)' }}>
+                {nivel.emoji} {nivel.nombre}
+              </span>
             </p>
           </div>
         </div>
         <div style={styles.xpWrap}>
           <div style={styles.xpBar}>
-            <div style={styles.xpFill} />
+            <div style={{
+              ...styles.xpFill,
+              width: `${progreso}%`,
+              transition: 'width 0.8s ease',
+            }} />
           </div>
-          <p style={styles.xpTexto}>Nivel 3 · 620 / 1000 XP</p>
+          <p style={styles.xpTexto}>
+            Nivel {nivel.nivel} · {xp} / {nivel.xpMax + 1} XP
+          </p>
         </div>
       </div>
 
@@ -86,10 +97,10 @@ function MapPage({ heroe, onNavegar }) {
         <div style={styles.lineaCorta} />
       </div>
       <p style={styles.subtitulo}>
-        ¿A dónde desea viajar hoy {heroe.nombre}?
+        ¿A dónde desea viajar hoy, {heroe.nombre}?
       </p>
 
-      {/* GRID DE DESTINOS */}
+      {/* Destinos */}
       <div style={styles.grid}>
         {DESTINOS.map(d => (
           <button
@@ -97,8 +108,8 @@ function MapPage({ heroe, onNavegar }) {
             style={{
               ...styles.destino,
               borderColor: hover === d.id ? d.color : 'var(--border)',
-              background: hover === d.id ? 'var(--bg3)' : 'var(--bg2)',
-              transform: hover === d.id ? 'translateY(-4px)' : 'translateY(0)',
+              background:  hover === d.id ? 'var(--bg3)' : 'var(--bg2)',
+              transform:   hover === d.id ? 'translateY(-4px)' : 'translateY(0)',
             }}
             onMouseEnter={() => setHover(d.id)}
             onMouseLeave={() => setHover(null)}
@@ -125,7 +136,7 @@ function MapPage({ heroe, onNavegar }) {
       {/* DESCRIPCION AL HACER HOVER */}
       <div style={{
         ...styles.descripcion,
-        opacity: destinoHover ? 1 : 0,
+        opacity:   destinoHover ? 1 : 0,
         transform: destinoHover ? 'translateY(0)' : 'translateY(6px)',
       }}>
         {destinoHover && (
@@ -207,7 +218,6 @@ const styles = {
     border: '1px solid var(--border)',
   },
   xpFill: {
-    width: '62%',
     height: '100%',
     background: 'linear-gradient(90deg, var(--silver-500), var(--silver-200))',
     borderRadius: '2px',
