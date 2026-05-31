@@ -1,0 +1,51 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Crimson Text', serif;
+  background: #0a0a0f;
+  color: #d4d0c8;
+  min-height: 100vh;
+}
+
+:root {
+  /* Fondos */
+  --bg:       #0a0a0f;
+  --bg2:      #11111a;
+  --bg3:      #181825;
+  --bg4:      #1f1f30;
+
+  /* Paleta del olor principal */
+  --silver-100: #f0eee8;
+  --silver-200: #d4d0c8;
+  --silver-300: #b0aba0;
+  --silver-400: #888480;
+  --silver-500: #605d58;
+  --silver-600: #3a3835;
+
+  /* Paleta del color sec */
+  --gold:      #c9a84c;
+  --gold-dim:  #8a6e2a;
+
+  /* Colores por categoría */
+  --cat-food:      #c0392b;
+  --cat-transport: #2471a3;
+  --cat-clothes:   #7d3c98;
+  --cat-tech:      #1e8449;
+  --cat-other:     #5f6b7c;
+
+
+  --text-primary:   #d4d0c8;
+  --text-secondary: #888480;
+  --text-muted:     #3a3835;
+
+
+  --surface:  #11111a;
+  --surface2: #181825;
+  --surface3: #1f1f30;
+  --border:   #2a2838;
+  --border2:  #3a3850;
+}
